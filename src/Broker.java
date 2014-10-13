@@ -84,7 +84,7 @@ public class Broker {
             BufferedReader stdIn =
                 new BufferedReader(new InputStreamReader(System.in));
             String fromServer = null;
-            
+
             
             server.println(input);
             fromServer = inServer.readLine();
