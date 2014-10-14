@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -11,22 +12,69 @@ import java.util.Scanner;
  * @author Romario
  */
 public class Cliente {
+    
+    static ArrayList<Candidatos> candidatos = new ArrayList();
+    
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-         Scanner scn2 = new Scanner(System.in);
-        int numeros[] = new int[10];
-        ProxyCliente proxy = new ProxyCliente();
+        
+        ProxyCliente proxyCliente = new ProxyCliente();
         int i=0;
         
         //proxy.Connect(1);
-        int a=scn.nextInt();
         
-        while(a!=0){
-            numeros[i] = a;
-            a=scn.nextInt();
-            i++;
+        
+        candidatos.add(new Candidatos("romario"));
+        candidatos.add(new Candidatos("alejandro"));
+        candidatos.add(new Candidatos("eduardo"));
+        String clienteDice;
+        System.out.println("Ingrese el el numero para votar por:"
+                + "\n1.- Votar"
+                + "\n2.- Ver Votos"
+                + "\n3.- Agregar Candidato "
+                + "\nPara enviar los datos escriba Enviar seguido del servicio "
+                + "\n Ejemplo: Enviar Barras, Enviar Pastel, Enviar Tabla");
+        while(!(clienteDice= scn.next()).toLowerCase().contains("enviar")){
+            
+            
+            switch(Integer.parseInt(clienteDice)){
+                case 1: votar();
+                    break;
+                case 2: verVotos();
+                    break;
+                case 3: agregarCandidato();
+                    break;
+            }
+            System.out.println("Ingrese el el numero para votar por:"
+                + "\n1.- Votar"
+                + "\n2.- Ver Votos "
+                    + "\n3.- Agregar Candidato");
         }
-        proxy.Connect(a,numeros);
+        System.out.println(clienteDice);
+        proxyCliente.Connect(clienteDice,candidatos);
         //proxy.peticionDeServicio(null, numeros);
+    }
+    
+    public static void agregarCandidato(){
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Ingresa el nombre");
+        candidatos.add(new Candidatos(scn.next()));
+    }
+    
+    public static void verVotos(){
+        for(Candidatos cand: candidatos){
+            System.out.println(cand.getNombre() + " >> " + cand.getVotos());
+        }
+    }
+    
+    public static void votar(){
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Ingresa el nombre del candidato");
+        String a = scn.next().toLowerCase();
+        for(Candidatos cand: candidatos){
+            if(cand.getNombre().equals(a)){
+                cand.incrementarVotos();
+            }
+        }
     }
 }

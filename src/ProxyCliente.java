@@ -18,45 +18,46 @@ import java.util.ArrayList;
  */
 public class ProxyCliente {
     public int[] numeros;
+    ArrayList<Candidatos> candidatos;
     public String datosServicio;
     
-    public void Connect(int broker,int[] numeros){
-        this.numeros = numeros;
-        String hostName = "192.168.230.149";
+    public void Connect(String clienteDice,ArrayList candidatos){
+        this.candidatos=candidatos;
+        String hostNameBroker = "192.168.230.149";
         //int portNumber = (int)this.ListaDeBrokers.get(broker);
-        int portNumber = 4444;
+        int portNumberBroker = 4444;
         try (
-            Socket kkSocket = new Socket(hostName, portNumber);
-            PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
+            Socket kkSocket = new Socket(hostNameBroker, portNumberBroker);
+            PrintWriter aBroker = new PrintWriter(kkSocket.getOutputStream(), true);
+            BufferedReader deBroker = new BufferedReader(
                 new InputStreamReader(kkSocket.getInputStream()));
         ) {
             BufferedReader stdIn =
                 new BufferedReader(new InputStreamReader(System.in));
-            String fromServer;
-            String fromUser;
+            String fromBroker;
+            String fromClient;
             
-            while ((fromServer = in.readLine()) != null) {
-                System.out.println("Broker: " + fromServer);
-                if (fromServer.equals("Bye."))
+            while ((fromBroker = deBroker.readLine()) != null) {
+                System.out.println("Broker: " + fromBroker);
+                if (fromBroker.equals("Bye."))
                     break;
                 
-                fromUser = stdIn.readLine();
-                if (fromUser != null) {
-                    if(fromUser.toLowerCase().contains("servicio")){
+                fromClient = clienteDice;
+                if (fromClient != null) {
+                    if(fromClient.toLowerCase().contains("servicio")){
                         packData(numeros);
-                        fromUser +=","+datosServicio;
-                        out.println(fromUser);
+                        fromClient +=","+datosServicio;
+                        aBroker.println(fromClient);
                     }else
-                    out.println(fromUser);
+                    aBroker.println(fromClient);
                 }
             }
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
+            System.err.println("Don't know about host " + hostNameBroker);
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " +
-                hostName);
+                hostNameBroker);
             System.exit(1);
         }
     
