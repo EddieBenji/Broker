@@ -31,7 +31,7 @@ public class Cliente {
                 + "\nPara enviar los datos escriba Enviar seguido del servicio"
                 + "\n Ejemplo: Enviar Barras, Enviar Pastel, Enviar Tabla");
 
-        while (!(clienteDice = scn.next().toLowerCase()).contains("enviar")) {
+        while (!(clienteDice = scn.nextLine().toLowerCase()).contains("enviar")) {
             switch (Integer.parseInt(clienteDice)) {
                 case 1:
                     votar();
@@ -52,6 +52,7 @@ public class Cliente {
                             + "\n Ejemplo: Enviar Barras, Enviar Pastel, Enviar Tabla");
                     break;
             }
+            System.out.print(">> ");
         }
         System.out.println(clienteDice);
         proxyCliente.Connect(clienteDice, candidatos);

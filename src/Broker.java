@@ -26,12 +26,12 @@ public class Broker {
     private static final int SENTBROKERS = 3;
     public int BrokerSeleccionado;
 
-    ArrayList<Servers> ListaDeBrokers = new ArrayList();
+    ArrayList<Servers> ListaDeServicios = new ArrayList();
 
     public void abrirServer() {
-        ListaDeBrokers.add(new Servers("192.168.230.149", 4444));
-        ListaDeBrokers.add(new Servers("192.168.230.150", 4444));
-        ListaDeBrokers.add(new Servers("192.168.230.151", 4444));
+        ListaDeServicios.add(new Servers("barras","192.168.230.149", 4444));
+        ListaDeServicios.add(new Servers("pastel","192.168.230.150", 4444));
+        ListaDeServicios.add(new Servers("tabla","192.168.230.151", 4444));
         int portNumber = 4444;
 
         try (
@@ -44,16 +44,10 @@ public class Broker {
             System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
             out.println("Te has conectado satisfactoriamente");
             String inputLine, outputLine;
-
-            
             // Initiate conversation with client
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Cliente: " + inputLine);
-                if ((inputLine.equalsIgnoreCase("listar"))) {
-                    listarBrokers(out);
-                } else if (inputLine.toLowerCase().contains("broker")) {
-                    conectarABroker(inputLine, out);
-                }else if (inputLine.toLowerCase().contains("servicio")) {
+                if (inputLine.toLowerCase().contains("enviar")) {
                     servicio(inputLine, out);
                 }else if (inputLine.toLowerCase().contains("agregar")) {
                     agregarServidor(inputLine, out);
@@ -70,12 +64,19 @@ public class Broker {
     }
 
     public void servicio(String input, PrintWriter outClient){
-        String hostName = ListaDeBrokers.get(BrokerSeleccionado).getIp();
-        //int portNumber = (int)this.ListaDeBrokers.get(broker);
-        int portNumber = ListaDeBrokers.get(BrokerSeleccionado).getPort();
-        
-        String servicio = input.split(",")[0];
+        String servicio = (input.split(",")[0]).split(" ")[1];
+        System.out.println(servicio);
         String datos = input.split(",")[1];
+        System.out.println(datos);
+        int servidor = buscarServicio(servicio);
+        if(servidor==-1){
+            outClient.println("Terminar servicio no encontrado");
+        }
+        String hostName = ListaDeServicios.get(BrokerSeleccionado).getIp();
+        //int portNumber = (int)this.ListaDeServicios.get(broker);
+        int portNumber = ListaDeServicios.get(BrokerSeleccionado).getPort();
+        
+        
         
         try (
             Socket kkSocket = new Socket(hostName, portNumber);
@@ -114,21 +115,18 @@ public class Broker {
         }
     }
 
-    public void conectarABroker(String str, PrintWriter out) {
-        String[] partida = str.split(" ");
-        if (partida.length != 2) {
-            out.println("Escribir> broker No.Broker");
-        } else {
-            BrokerSeleccionado = Integer.parseInt(partida[1]);
-            out.println("Broker elegido> " + partida[1]);
+    public int buscarServicio(String servicio){
+        int num=0;
+        for(Servers serv: ListaDeServicios){
+            if(serv.getServicio().equalsIgnoreCase(servicio)){
+                return num;
+            }
+            num++;
         }
+        return -1;
     }
 
-    public void listarBrokers(PrintWriter out) {
-        String outputLine;
-        outputLine = ListaDeBrokers.toString();
-        out.println(outputLine);
-    }
+    
 
     public static void main(String[] args) {
         Broker broker = new Broker();

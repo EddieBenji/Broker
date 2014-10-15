@@ -34,18 +34,18 @@ public class ProxyCliente {
             String fromBroker;
             String fromClient;
 
-            while ((fromBroker = deBroker.readLine()) != null) {
-                System.out.println("Broker: " + fromBroker);
-                if (fromBroker.equals("Bye.")) {
+            while ((fromBroker = deBroker.readLine().toLowerCase()) != null) {
+                if(fromBroker.contains("terminar")){
+                    System.out.println("Broker: " + fromBroker);
                     break;
                 }
-
+                System.out.println("Broker: " + fromBroker);
                 fromClient = clienteDice;
                 packData();
                 fromClient += "," + datosServicio;
                 aBroker.println(fromClient);
-
             }
+            
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostNameBroker);
             System.exit(1);

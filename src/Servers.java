@@ -12,11 +12,19 @@
 public class Servers {
     String ip;
     int port;
-    
-    public Servers(String ip, int port){
+
+    public String getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(String servicio) {
+        this.servicio = servicio;
+    }
+    String servicio;
+    public Servers(String servicio, String ip, int port){
         this.ip = ip;
         this.port = port;
-        
+        this.servicio=servicio.toLowerCase();
     }
 
     public String getIp() {
