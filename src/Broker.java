@@ -42,7 +42,8 @@ public class Broker {
                         new InputStreamReader(clientSocket.getInputStream()));) {
             
             System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
-            out.println("Te has conectado satisfactoriamente");
+            out.println("Te has conectado satisfactoriamente "
+                    + "\nSe procesará la solicitud");
             String inputLine, outputLine;
             // Initiate conversation with client
             while ((inputLine = in.readLine()) != null) {
@@ -65,16 +66,16 @@ public class Broker {
 
     public void servicio(String input, PrintWriter outClient){
         String servicio = (input.split(",")[0]).split(" ")[1];
-        System.out.println(servicio);
+        //System.out.println(servicio);
         String datos = input.split(",")[1];
-        System.out.println(datos);
+        //System.out.println(datos);
         int servidor = buscarServicio(servicio);
         if(servidor==-1){
-            outClient.println("Terminar servicio no encontrado");
-        }
-        String hostName = ListaDeServicios.get(BrokerSeleccionado).getIp();
+            outClient.println("Servicio no encontrado");
+        } else{
+            String hostName = ListaDeServicios.get(servidor).getIp();
         //int portNumber = (int)this.ListaDeServicios.get(broker);
-        int portNumber = ListaDeServicios.get(BrokerSeleccionado).getPort();
+        int portNumber = ListaDeServicios.get(servidor).getPort();
         
         
         
@@ -105,6 +106,8 @@ public class Broker {
                 hostName);
             System.exit(1);
         }
+        }
+        
     }
     public void agregarServidor(String str, PrintWriter out) {
         String[] partida = str.split(" ");

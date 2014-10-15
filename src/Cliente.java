@@ -13,15 +13,14 @@ import java.util.Scanner;
 public class Cliente {
 
     static ArrayList<Candidatos> candidatos = new ArrayList();
-
-    public static void main(String[] args) {
+    static int id=4;
+    static ProxyCliente proxyCliente;
+    public static void principal() {
         Scanner scn = new Scanner(System.in);
 
-        ProxyCliente proxyCliente = new ProxyCliente();
+        proxyCliente = new ProxyCliente();
 
-        candidatos.add(new Candidatos("romario"));
-        candidatos.add(new Candidatos("alejandro"));
-        candidatos.add(new Candidatos("eduardo"));
+       
         String clienteDice;
         System.out.println("Ingrese el el numero para votar por:"
                 + "\n1.- Votar"
@@ -31,8 +30,12 @@ public class Cliente {
                 + "\nPara enviar los datos escriba Enviar seguido del servicio"
                 + "\n Ejemplo: Enviar Barras, Enviar Pastel, Enviar Tabla");
 
-        while (!(clienteDice = scn.nextLine().toLowerCase()).contains("enviar")) {
-            switch (Integer.parseInt(clienteDice)) {
+       try{
+           while (!(clienteDice = scn.nextLine().toLowerCase()).contains("enviar")) {
+            
+            int opcion = Integer.parseInt(clienteDice);
+        
+            switch (opcion) {
                 case 1:
                     votar();
                     break;
@@ -54,31 +57,50 @@ public class Cliente {
             }
             System.out.print(">> ");
         }
-        System.out.println(clienteDice);
+        //System.out.println(clienteDice);
         proxyCliente.Connect(clienteDice, candidatos);
         //proxy.peticionDeServicio(null, numeros);
+    }  catch (NumberFormatException nex){
+                System.out.println("Opcion no válida");
+                principal();
+            }
     }
-
+    
+    public static void main(String[] args) {
+        inicializarCandidatos();
+        principal();
+    }
+    
+    public static void inicializarCandidatos(){
+        candidatos.add(new Candidatos(1,"romario"));
+        candidatos.add(new Candidatos(2,"alejandro"));
+        candidatos.add(new Candidatos(3,"eduardo"));
+    }
     public static void agregarCandidato() {
         Scanner scn = new Scanner(System.in);
         System.out.println("Ingresa el nombre");
-        candidatos.add(new Candidatos(scn.next()));
+        candidatos.add(new Candidatos(id,scn.nextLine()));
+        id++;
     }
 
     public static void verVotos() {
         for (Candidatos cand : candidatos) {
-            System.out.println(cand.getNombre() + " >> " + cand.getVotos());
+            System.out.println("Id: "+ cand.getId() + "  "+cand.getNombre() + " >> " + cand.getVotos());
         }
     }
 
     public static void votar() {
+        boolean encontrado= false;
         Scanner scn = new Scanner(System.in);
         System.out.println("Ingresa el nombre del candidato");
-        String a = scn.next().toLowerCase();
+        String a = scn.nextLine().toLowerCase();
         for (Candidatos cand : candidatos) {
             if (cand.getNombre().equals(a)) {
                 cand.incrementarVotos();
+                encontrado= true;
             }
         }
+        if(!encontrado)
+            System.out.println("Candidato no encontrado");
     }
 }

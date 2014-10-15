@@ -10,10 +10,19 @@
 public class Candidatos {
     String nombre;
     int votos;
-
-    public Candidatos(String nombre) {
+    int id;
+    public Candidatos(int id,String nombre) {
         this.nombre = nombre.toLowerCase();
         this.votos = 0;
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     public void incrementarVotos(){

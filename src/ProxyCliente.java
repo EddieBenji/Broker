@@ -22,7 +22,7 @@ public class ProxyCliente {
 
     public void Connect(String clienteDice, ArrayList candidatos) {
         this.candidatos = candidatos;
-        String hostNameBroker = "127.0.0.1";
+        String hostNameBroker = "192.168.229.106";
         int portNumberBroker = 4444;
         try (
                 Socket kkSocket = new Socket(hostNameBroker, portNumberBroker);
@@ -35,17 +35,26 @@ public class ProxyCliente {
             String fromClient;
 
             while ((fromBroker = deBroker.readLine().toLowerCase()) != null) {
-                if(fromBroker.contains("terminar")){
+                System.out.println(fromBroker);
+                if (fromBroker.contains("terminar")) {
                     System.out.println("Broker: " + fromBroker);
                     break;
                 }
+
+                fromClient = stdIn.readLine();
+                if (fromClient != null) {
+                    if (fromClient.toLowerCase().contains("enviar")) {
+                        packData();
+                        fromClient += "," + datosServicio;
+                        aBroker.println(fromClient);
+                    } else{
+                        System.out.println("Cliente: " + fromClient);
+                    aBroker.println(fromClient);
+                    }
+                }
                 System.out.println("Broker: " + fromBroker);
-                fromClient = clienteDice;
-                packData();
-                fromClient += "," + datosServicio;
-                aBroker.println(fromClient);
             }
-            
+
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostNameBroker);
             System.exit(1);
@@ -65,6 +74,6 @@ public class ProxyCliente {
             datosServicio += dato;
         }
 
-        System.out.println(datosServicio);
+        //System.out.println(datosServicio);
     }
 }
