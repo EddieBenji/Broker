@@ -19,8 +19,8 @@ public class ProxyCliente {
 
     ArrayList<Candidatos> candidatos;
     public String datosServicio;
-    private static final int SOLICITUDENVIADA = 1;
-    
+    private static final int COMANDOENVIADO = 1;
+    private static final int TERMINO = 2;
     private static int STATE = 0;
     
     public void Connect(ArrayList candidatos,String host, String port) {
@@ -38,7 +38,7 @@ public class ProxyCliente {
             String fromClient;
 
             while ((fromBroker = deBroker.readLine()) != null) {
-                System.out.println("Broker: " +fromBroker);
+                System.out.println("**Broker: " +fromBroker);
                 if (fromBroker.toLowerCase().contains("terminar")) {
                     //System.out.println("Broker: " + fromBroker);
                     STATE=0;
@@ -46,19 +46,18 @@ public class ProxyCliente {
                 }
 
                 //fromClient = clienteDice;
-                if(STATE!=SOLICITUDENVIADA){
+                if(STATE!=COMANDOENVIADO){
                     System.out.print(">>");
                 if ((fromClient=stdIn.readLine()) != null) {
                         if (fromClient.toLowerCase().contains("enviar")) {
-                            STATE = SOLICITUDENVIADA;
                             packData();
                             fromClient += "," + datosServicio;
                             aBroker.println(fromClient);
                         } else{
-                            System.out.println("Cliente: " + fromClient);
                             aBroker.println(fromClient);
                             //aBroker.println(fromClient);
                         }
+                        STATE = COMANDOENVIADO;
                     }
                 }
             }
