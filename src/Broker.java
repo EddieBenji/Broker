@@ -10,9 +10,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choose License Headers deCliente Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template deCliente the editor.
  */
 /**
  *
@@ -28,40 +28,43 @@ public class Broker {
 
     ArrayList<Servers> ListaDeServicios = new ArrayList();
 
-    public void abrirServer() {
+    public void abrirBroker() {
         ListaDeServicios.add(new Servers("barras","192.168.230.149", 4444));
         ListaDeServicios.add(new Servers("pastel","192.168.230.150", 4444));
         ListaDeServicios.add(new Servers("tabla","192.168.230.151", 4444));
         int portNumber = 4444;
+        
+        while(true){
+            try (
+                    ServerSocket serverSocket = new ServerSocket(portNumber);
+                    Socket clientSocket = serverSocket.accept();
+                    PrintWriter aCliente = new PrintWriter(clientSocket.getOutputStream(), true);
+                    BufferedReader deCliente = new BufferedReader(
+                            new InputStreamReader(clientSocket.getInputStream()));) {
 
-        try (
-                ServerSocket serverSocket = new ServerSocket(portNumber);
-                Socket clientSocket = serverSocket.accept();
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(clientSocket.getInputStream()));) {
-            
-            System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
-            out.println("Te has conectado satisfactoriamente "
-                    + "\nSe procesará la solicitud");
-            String inputLine, outputLine;
-            // Initiate conversation with client
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Cliente: " + inputLine);
-                if (inputLine.toLowerCase().contains("enviar")) {
-                    servicio(inputLine, out);
-                }else if (inputLine.toLowerCase().contains("agregar")) {
-                    agregarServidor(inputLine, out);
-                } else {
-                    out.println("Comando no encontrado");
+                System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
+                aCliente.println("Te has conectado satisfactoriamente "
+                        + "\nSe procesará la solicitud");
+                String inputLine, outputLine;
+                // Initiate conversation with client
+                while ((inputLine = deCliente.readLine()) != null) {
+                    System.out.println("Cliente: " + inputLine);
+                    if (inputLine.toLowerCase().contains("enviar")) {
+                        servicio(inputLine, aCliente);
+                    }else if (inputLine.toLowerCase().contains("agregar")) {
+                        agregarServidor(inputLine, aCliente);
+                    } else {
+                        aCliente.println("Comando no encontrado");
+                    }
+
                 }
-
+            } catch (IOException e) {
+                System.out.println("Exception caught when trying to listen on port "
+                        + portNumber + " or listening for a connection");
+                System.out.println(e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                    + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
+        }    
+            
     }
 
     public void servicio(String input, PrintWriter outClient){
@@ -71,7 +74,7 @@ public class Broker {
         //System.out.println(datos);
         int servidor = buscarServicio(servicio);
         if(servidor==-1){
-            outClient.println("Servicio no encontrado");
+            outClient.println("Terminar Servicio no encontrado");
         } else{
             String hostName = ListaDeServicios.get(servidor).getIp();
         //int portNumber = (int)this.ListaDeServicios.get(broker);
@@ -102,9 +105,9 @@ public class Broker {
             System.err.println("Don't know about hostServer " + hostName);
             System.exit(1);
         } catch (IOException e) {
+            outClient.println("Terminar Servidor de servicio "+servicio+" caido.");
             System.err.println("Couldn't get I/O for the connection to " +
                 hostName);
-            System.exit(1);
         }
         }
         
@@ -133,6 +136,6 @@ public class Broker {
 
     public static void main(String[] args) {
         Broker broker = new Broker();
-        broker.abrirServer();
+        broker.abrirBroker();
     }
 }

@@ -15,11 +15,11 @@ import java.util.ArrayList;
  *
  * @author Romario
  */
-public class ProxyCliente {
+public class ProxyCliente extends Thread {
 
     ArrayList<Candidatos> candidatos;
     public String datosServicio;
-
+    
     public void Connect(String clienteDice, ArrayList candidatos) {
         this.candidatos = candidatos;
         String hostNameBroker = "192.168.229.106";
@@ -41,7 +41,7 @@ public class ProxyCliente {
                     break;
                 }
 
-                fromClient = stdIn.readLine();
+                fromClient = clienteDice;
                 if (fromClient != null) {
                     if (fromClient.toLowerCase().contains("enviar")) {
                         packData();

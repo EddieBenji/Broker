@@ -22,7 +22,7 @@ public class Cliente {
 
        
         String clienteDice;
-        System.out.println("Ingrese el el numero para votar por:"
+        System.out.println("Ingrese el el numero de lo que desea realizar:"
                 + "\n1.- Votar"
                 + "\n2.- Ver Votos"
                 + "\n3.- Agregar Candidato "
@@ -46,19 +46,22 @@ public class Cliente {
                     agregarCandidato();
                     break;
                 case 4:
-                    System.out.println("Ingrese el el numero para votar por:"
+                    System.out.println("Ingrese el numero de lo que desea realizar:"
                             + "\n1.- Votar"
                             + "\n2.- Ver Votos"
                             + "\n3.- Agregar Candidato "
                             + "\n4.- Ver opciones"
-                            + "\nPara enviar los datos escriba Enviar seguido del servicio"
-                            + "\n Ejemplo: Enviar Barras, Enviar Pastel, Enviar Tabla");
+                            + "\n5.- Enviar SERVICIO");
+                    break;
+                case 5: 
+                    //clienteDice= scn.nextLine().toLowerCase();
+                    proxyCliente.Connect(clienteDice, candidatos);
                     break;
             }
             System.out.print(">> ");
         }
         //System.out.println(clienteDice);
-        proxyCliente.Connect(clienteDice, candidatos);
+        
         //proxy.peticionDeServicio(null, numeros);
     }  catch (NumberFormatException nex){
                 System.out.println("Opcion no válida");
