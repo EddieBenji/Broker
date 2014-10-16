@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Romario
  */
-public class ProxyCliente extends Thread {
+public class ProxyCliente {
 
     ArrayList<Candidatos> candidatos;
     public String datosServicio;
@@ -23,10 +23,10 @@ public class ProxyCliente extends Thread {
     
     private static int STATE = 0;
     
-    public void Connect(String clienteDice, ArrayList candidatos) {
+    public void Connect(String clienteDice, ArrayList candidatos,String host, String port) {
         this.candidatos = candidatos;
-        String hostNameBroker = "192.168.229.56";
-        int portNumberBroker = 4444;
+        String hostNameBroker = host;
+        int portNumberBroker = Integer.parseInt(port);
         try (
                 Socket kkSocket = new Socket(hostNameBroker, portNumberBroker);
                 PrintWriter aBroker = new PrintWriter(kkSocket.getOutputStream(), true);

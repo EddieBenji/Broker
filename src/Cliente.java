@@ -15,7 +15,7 @@ public class Cliente {
     static ArrayList<Candidatos> candidatos = new ArrayList();
     static int id=4;
     static ProxyCliente proxyCliente;
-    public static void principal() {
+    public static void principal(String host, String port) {
         Scanner scn = new Scanner(System.in);
 
         proxyCliente = new ProxyCliente();
@@ -30,7 +30,6 @@ public class Cliente {
                 + "\n5.- Escribir comando "
                 + "\nEscriba salir para terminar");
                 
-       try{
            System.out.print(">> ");
            while (!(clienteDice = scn.nextLine().toLowerCase()).contains("salir")) {
             
@@ -56,7 +55,7 @@ public class Cliente {
                     break;
                 case "5": 
                     //clienteDice= scn.nextLine().toLowerCase();
-                    proxyCliente.Connect(clienteDice, candidatos);
+                    proxyCliente.Connect(clienteDice, candidatos,host,port);
                     break;
                 default: System.out.println("Opción no válida");
                     break;
@@ -66,15 +65,17 @@ public class Cliente {
         //System.out.println(clienteDice);
         
         //proxy.peticionDeServicio(null, numeros);
-    }  catch (NumberFormatException nex){
-                System.out.println("Opcion no válida");
-                principal();
-            }
+    
     }
     
     public static void main(String[] args) {
+        if (args.length != 2) {
+            System.err.println(
+                "Usage: java EchoClient <host name> <port number>");
+            System.exit(1);
+        }
         inicializarCandidatos();
-        principal();
+        principal(args[0],args[1]);
     }
     
     public static void inicializarCandidatos(){
