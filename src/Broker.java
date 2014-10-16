@@ -46,7 +46,7 @@ public class Broker {
                     System.out.println("Cliente: " + inputLine);
                     
                     if (inputLine.toLowerCase().contains("enviar")) {
-                        aCliente.println("Se procesará la solicitud");
+                        aCliente.println("Se procesara la solicitud");
                         servicio(inputLine, aCliente);
                         
                     }else if (inputLine.toLowerCase().contains("agregar")) {
@@ -55,7 +55,6 @@ public class Broker {
                     } else {
                         aCliente.println("Terminar Comando no encontrado");
                     }
-
                 }
             } catch (IOException e) {
                 System.out.println("Exception caught when trying to listen on port "
