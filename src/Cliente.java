@@ -22,40 +22,43 @@ public class Cliente {
 
        
         String clienteDice;
-        System.out.println("Ingrese el el numero de lo que desea realizar:"
+        System.out.println("\n\nIngrese el el numero de lo que desea realizar:"
                 + "\n1.- Votar"
                 + "\n2.- Ver Votos"
                 + "\n3.- Agregar Candidato "
                 + "\n4.- Ver opciones"
-                + "\nPara enviar los datos escriba Enviar seguido del servicio"
-                + "\n Ejemplo: Enviar Barras, Enviar Pastel, Enviar Tabla");
-
+                + "\n5.- Escribir comando "
+                + "\nEscriba salir para terminar");
+                
        try{
-           while (!(clienteDice = scn.nextLine().toLowerCase()).contains("enviar")) {
+           System.out.print(">> ");
+           while (!(clienteDice = scn.nextLine().toLowerCase()).contains("salir")) {
             
-            int opcion = Integer.parseInt(clienteDice);
-        
+            String opcion = clienteDice;
+            
             switch (opcion) {
-                case 1:
+                case "1":
                     votar();
                     break;
-                case 2:
+                case "2":
                     verVotos();
                     break;
-                case 3:
+                case "3":
                     agregarCandidato();
                     break;
-                case 4:
+                case "4":
                     System.out.println("Ingrese el numero de lo que desea realizar:"
                             + "\n1.- Votar"
                             + "\n2.- Ver Votos"
                             + "\n3.- Agregar Candidato "
                             + "\n4.- Ver opciones"
-                            + "\n5.- Enviar SERVICIO");
+                            + "\n5.- Escribir comando");
                     break;
-                case 5: 
+                case "5": 
                     //clienteDice= scn.nextLine().toLowerCase();
                     proxyCliente.Connect(clienteDice, candidatos);
+                    break;
+                default: System.out.println("Opción no válida");
                     break;
             }
             System.out.print(">> ");

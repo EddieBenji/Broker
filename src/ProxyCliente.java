@@ -19,10 +19,13 @@ public class ProxyCliente extends Thread {
 
     ArrayList<Candidatos> candidatos;
     public String datosServicio;
+    private static final int SOLICITUDENVIADA = 1;
+    
+    private static int STATE = 0;
     
     public void Connect(String clienteDice, ArrayList candidatos) {
         this.candidatos = candidatos;
-        String hostNameBroker = "192.168.229.106";
+        String hostNameBroker = "192.168.229.56";
         int portNumberBroker = 4444;
         try (
                 Socket kkSocket = new Socket(hostNameBroker, portNumberBroker);
@@ -34,25 +37,28 @@ public class ProxyCliente extends Thread {
             String fromBroker;
             String fromClient;
 
-            while ((fromBroker = deBroker.readLine().toLowerCase()) != null) {
-                System.out.println(fromBroker);
-                if (fromBroker.contains("terminar")) {
-                    System.out.println("Broker: " + fromBroker);
+            while ((fromBroker = deBroker.readLine()) != null) {
+                System.out.println("Broker: " +fromBroker);
+                if (fromBroker.toLowerCase().contains("terminar")) {
+                    //System.out.println("Broker: " + fromBroker);
                     break;
                 }
 
-                fromClient = clienteDice;
-                if (fromClient != null) {
-                    if (fromClient.toLowerCase().contains("enviar")) {
-                        packData();
-                        fromClient += "," + datosServicio;
+                //fromClient = clienteDice;
+                if(STATE!=SOLICITUDENVIADA){
+                    System.out.print(">>");
+                if ((fromClient=stdIn.readLine()) != null) {
+                        if (fromClient.toLowerCase().contains("enviar")) {
+                            STATE = SOLICITUDENVIADA;
+                            packData();
+                            fromClient += "," + datosServicio;
+                            aBroker.println(fromClient);
+                        } else{
+                            System.out.println("Cliente: " + fromClient);
                         aBroker.println(fromClient);
-                    } else{
-                        System.out.println("Cliente: " + fromClient);
-                    aBroker.println(fromClient);
+                        }
                     }
                 }
-                System.out.println("Broker: " + fromBroker);
             }
 
         } catch (UnknownHostException e) {

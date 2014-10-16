@@ -24,6 +24,7 @@ public class Broker {
     private static final int SENDTOPROXYSERVER = 1;
     private static final int SENDTOPROXYCLIENT = 2;
     private static final int SENTBROKERS = 3;
+    private static int STATE;
     public int BrokerSeleccionado;
 
     ArrayList<Servers> ListaDeServicios = new ArrayList();
@@ -41,20 +42,22 @@ public class Broker {
                     PrintWriter aCliente = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader deCliente = new BufferedReader(
                             new InputStreamReader(clientSocket.getInputStream()));) {
-
+                System.out.println("Server up and running");
+                aCliente.println("Ingresar comando");
                 System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
-                aCliente.println("Te has conectado satisfactoriamente "
-                        + "\nSe procesará la solicitud");
+               
                 String inputLine, outputLine;
                 // Initiate conversation with client
                 while ((inputLine = deCliente.readLine()) != null) {
+                     aCliente.println("Te has conectado satisfactoriamente ");
                     System.out.println("Cliente: " + inputLine);
                     if (inputLine.toLowerCase().contains("enviar")) {
+                        aCliente.println("Se procesará la solicitud");
                         servicio(inputLine, aCliente);
                     }else if (inputLine.toLowerCase().contains("agregar")) {
                         agregarServidor(inputLine, aCliente);
                     } else {
-                        aCliente.println("Comando no encontrado");
+                        aCliente.println("Terminar Comando no encontrado");
                     }
 
                 }
@@ -74,7 +77,7 @@ public class Broker {
         //System.out.println(datos);
         int servidor = buscarServicio(servicio);
         if(servidor==-1){
-            outClient.println("Terminar Servicio no encontrado");
+            outClient.println("Terminar Servicio no encontrado\nPresionar Enter para continuar");
         } else{
             String hostName = ListaDeServicios.get(servidor).getIp();
         //int portNumber = (int)this.ListaDeServicios.get(broker);
