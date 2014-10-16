@@ -23,7 +23,7 @@ public class ProxyCliente {
     
     private static int STATE = 0;
     
-    public void Connect(String clienteDice, ArrayList candidatos,String host, String port) {
+    public void Connect(ArrayList candidatos,String host, String port) {
         this.candidatos = candidatos;
         String hostNameBroker = host;
         int portNumberBroker = Integer.parseInt(port);
@@ -41,6 +41,7 @@ public class ProxyCliente {
                 System.out.println("Broker: " +fromBroker);
                 if (fromBroker.toLowerCase().contains("terminar")) {
                     //System.out.println("Broker: " + fromBroker);
+                    STATE=0;
                     break;
                 }
 
@@ -55,7 +56,8 @@ public class ProxyCliente {
                             aBroker.println(fromClient);
                         } else{
                             System.out.println("Cliente: " + fromClient);
-                        aBroker.println(fromClient);
+                            aBroker.println(fromClient);
+                            //aBroker.println(fromClient);
                         }
                     }
                 }
@@ -63,11 +65,9 @@ public class ProxyCliente {
 
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostNameBroker);
-            System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to "
                     + hostNameBroker);
-            System.exit(1);
         }
 
     }

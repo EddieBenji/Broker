@@ -55,11 +55,12 @@ public class Cliente {
                     break;
                 case "5": 
                     //clienteDice= scn.nextLine().toLowerCase();
-                    proxyCliente.Connect(clienteDice, candidatos,host,port);
+                    proxyCliente.Connect(candidatos,host,port);
                     break;
-                default: System.out.println("Opción no válida");
+                default: System.out.println("Opcion no valida");
                     break;
             }
+            System.out.println("Ingrese opcion");
             System.out.print(">> ");
         }
         //System.out.println(clienteDice);
@@ -71,7 +72,9 @@ public class Cliente {
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println(
-                "Usage: java EchoClient <host name> <port number>");
+                "Uso: java Client <host name> <port number>");
+            System.err.println(
+                "Ejemplo: java Client 192.168.123.123 4444");
             System.exit(1);
         }
         inicializarCandidatos();

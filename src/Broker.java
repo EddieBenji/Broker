@@ -20,13 +20,6 @@ import java.util.ArrayList;
  */
 public class Broker {
 
-    private static final int WAITING = 0;
-    private static final int SENDTOPROXYSERVER = 1;
-    private static final int SENDTOPROXYCLIENT = 2;
-    private static final int SENTBROKERS = 3;
-    private static int STATE;
-    public int BrokerSeleccionado;
-
     ArrayList<Servers> ListaDeServicios = new ArrayList();
 
     public void abrirBroker() {
@@ -49,13 +42,16 @@ public class Broker {
                 String inputLine, outputLine;
                 // Initiate conversation with client
                 while ((inputLine = deCliente.readLine()) != null) {
-                     aCliente.println("Te has conectado satisfactoriamente ");
+                    aCliente.println("Comando recibido.");
                     System.out.println("Cliente: " + inputLine);
+                    
                     if (inputLine.toLowerCase().contains("enviar")) {
                         aCliente.println("Se procesará la solicitud");
                         servicio(inputLine, aCliente);
+                        
                     }else if (inputLine.toLowerCase().contains("agregar")) {
                         agregarServidor(inputLine, aCliente);
+                        
                     } else {
                         aCliente.println("Terminar Comando no encontrado");
                     }
